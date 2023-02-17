@@ -177,3 +177,8 @@ export SHELL_COMMON=$HOME/.config/shell
 
 export IN_ZINIT=1
 . "$SHELL_COMMON/zsh/zinit.zsh"
+
+# To customize prompt, run `p10k configure` or edit ~/.config/shell/zsh/p10k.zsh.
+[[ ! -f ~/.config/shell/zsh/p10k.zsh ]] || source ~/.config/shell/zsh/p10k.zsh
+
+[ -f "/home/tom/.ghcup/env" ] && source "/home/tom/.ghcup/env" # ghcup-env
