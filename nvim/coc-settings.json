@@ -1,0 +1,19 @@
+{
+  "semanticTokens.enable": true,
+  "prettier.requireConfig": true,
+
+  "tslint.enable": true,
+  "tslint.autoFixOnSave": true,
+
+  "coc.preferences.formatOnSaveFiletypes": [
+    "css",
+    "markdown",
+    "Markdown",
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "inlayHint.enable": false
+}
+

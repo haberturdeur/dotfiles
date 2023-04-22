@@ -14,6 +14,8 @@ export PATH=/home/linuxbrew/.linuxbrew/bin:$PATH
 export PATH=/usr/local/lib/node_modules/:$PATH
 export PATH=/home/tom/.local/bin/:$PATH
 export PATH=/home/tom/intelFPGA_lite/20.1/quartus/bin/:$PATH
+export PATH=$HOME/scripts:$PATH
+export PATH=/opt/microchip/xc8/v2.40/bin:/opt/microchip/xc8/v2.40/pic/bin:$PATH
 
 export EDITOR="nvim"
 
@@ -123,8 +125,8 @@ alias ip="ip -c"
 alias lock="loginctl lock-session"
 alias sync="clone bisync drive-simple:Logseq local:/home/tom/Documents/Logseq >/dev/null 2>&1"
 alias prj="cd ~/Projects"
-alias matrix-commander=" matrix-commander"
-alias mc-read="matrix-commander --listen-self --tail"
+alias matrix-commander=" matrix-commander -s .config/matrix-commander/store"
+alias mc-read="matrix-commander --listen-self --tail -s .config/matrix-commander/store"
 
 #####################
 # FZF SETTINGS      #
@@ -154,20 +156,21 @@ timezsh() {
 # PERL_MB_OPT="--install_base \"/home/tom/perl5\""; export PERL_MB_OPT;
 # PERL_MM_OPT="INSTALL_BASE=/home/tom/perl5"; export PERL_MM_OPT;
 
+[ -f /opt/miniconda3/etc/profile.d/conda.sh ] && source /opt/miniconda3/etc/profile.d/conda.sh
 
 # >>> conda initialize >>>
 # # !! Contents within this block are managed by 'conda init' !!
-# __conda_setup="$('/home/tom/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-# if [ $? -eq 0 ]; then
-#     eval "$__conda_setup"
-# else
-#     if [ -f "/home/tom/miniconda3/etc/profile.d/conda.sh" ]; then
-#         . "/home/tom/miniconda3/etc/profile.d/conda.sh"
-#     else
-#         export PATH="/home/tom/miniconda3/bin:$PATH"
-#     fi
-# fi
-# unset __conda_setup
+__conda_setup="$('/home/tom/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+eval "$__conda_setup"
+else
+if [ -f "/home/tom/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/tom/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/tom/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
 # <<< conda initialize <<<
 
 export SHELL_COMMON=$HOME/.config/shell
