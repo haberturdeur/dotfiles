@@ -76,7 +76,8 @@ zinit wait'0b' lucid for \
         alias gcd='gco dev'
     " \
     OMZP::git \
-    OMZP::fzf
+    OMZP::fzf \
+    OMZP::dotenv
 
 zinit ice wait'0' lucid depth=1 \
     atload"autoload -Uz compinit && compinit -u" \

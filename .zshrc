@@ -5,6 +5,8 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+export TERM="alacritty"
+
 setopt HIST_IGNORE_SPACE
 export PATH=$HOME/bin/:$PATH
 export PATH=/usr/local/bin/:$PATH
@@ -127,6 +129,7 @@ alias sync="clone bisync drive-simple:Logseq local:/home/tom/Documents/Logseq >/
 alias prj="cd ~/Projects"
 alias matrix-commander=" matrix-commander -s .config/matrix-commander/store"
 alias mc-read="matrix-commander --listen-self --tail -s .config/matrix-commander/store"
+alias haberun="export HOME=$HOME/.profiles/haberun; discord;"
 
 #####################
 # FZF SETTINGS      #
