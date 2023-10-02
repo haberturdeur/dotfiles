@@ -1,5 +1,5 @@
 import:
-  - "/Users/fatih/.config/alacritty/color.yml"
+  - "~/.config/alacritty/color.yml"
 
 
 env:
@@ -41,4 +41,5 @@ hints:
 font:
   normal:
     family: DejaVu Sans M Nerd Font
+      #  size: 7
 

@@ -39,8 +39,8 @@ zinit wait lucid for \
   atinit"zicompinit; zicdreplay"  \
         zdharma-continuum/fast-syntax-highlighting \
       OMZP::colored-man-pages \
-  as"completion" \
-        OMZP::docker/_docker
+# as"completion" \
+#        OMZP::docker/_docker
 
 zi0c has'fzf' ''
 zinit light ZoeFiri/fz
@@ -72,6 +72,7 @@ zinit wait'0b' lucid for \
     OMZL::key-bindings.zsh \
     OMZL::spectrum.zsh \
     OMZL::termsupport.zsh \
+    OMZL::functions.zsh \
     atload"
         alias gcd='gco dev'
     " \

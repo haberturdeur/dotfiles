@@ -31,7 +31,7 @@ return require('packer').startup(function(use)
     use 'vim-airline/vim-airline-themes'
     -- use 'chriskempson/base16-vim'
     -- use 'tomasiser/vim-code-dark'
-    -- use 'haberturdeur/vim-code-dark'
+    use 'haberturdeur/vim-code-dark'
 
     use {'junegunn/fzf', run = function() vim.fn['fzf#install']() end }
     use 'junegunn/fzf.vim'
@@ -45,7 +45,7 @@ return require('packer').startup(function(use)
     -- use 'bfrg/vim-cpp-modern'
 
     -- use 'junegunn/rainbow_parentheses.vim'
-    use 'HiPhish/nvim-ts-rainbow2'
+    -- use 'HiPhish/nvim-ts-rainbow2'
     -- use 'tanvirtin/monokai.nvim'
     -- use 'luochen1990/rainbow'
     if packer_bootstrap then

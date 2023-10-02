@@ -1,6 +1,9 @@
 [user]
-	email = tomas.rohlinek@outlook.cz
+	email = tomas.rohlinek@espressif.com
 	name = Tomáš Rohlínek
-	signingkey = 288BC7E47BF1409B!
+	signingkey = BDE1CEDD10F7E372!
 [commit]
 	gpgsign = true
+[credential]
+	helper = libsecret
+	username = tomas.rohlinek@espressif.com

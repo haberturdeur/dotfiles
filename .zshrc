@@ -21,7 +21,7 @@ export PATH=/opt/microchip/xc8/v2.40/bin:/opt/microchip/xc8/v2.40/pic/bin:$PATH
 
 export EDITOR="nvim"
 
-export IDF_PATH=$HOME/esp/esp-idf
+export IDF_PATH=$HOME/esp-idf
 
 export GPG_TTY=$(tty)
 
@@ -110,7 +110,7 @@ export COMPOSE_DOCKER_CLI_BUILD=1
 # ALIASES           #
 #####################
 alias fd=fdfind
-alias get_idf=". $HOME/esp/esp-idf/export.sh"
+alias get_idf=". $HOME/esp-idf/export.sh"
 alias open="flatpak run re.sonny.Junction"
 alias ls="ls --color=always"
 alias pip=pip3
@@ -188,3 +188,5 @@ export IN_ZINIT=1
 [[ ! -f ~/.config/shell/zsh/p10k.zsh ]] || source ~/.config/shell/zsh/p10k.zsh
 
 [ -f "/home/tom/.ghcup/env" ] && source "/home/tom/.ghcup/env" # ghcup-env
+
+export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/ssh-agent.socket

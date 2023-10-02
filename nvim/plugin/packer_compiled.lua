@@ -49,8 +49,8 @@ local function save_profiles(threshold)
 end
 
 time([[Luarocks path setup]], true)
-local package_path_str = "/home/tom/.cache/nvim/packer_hererocks/2.1.0-beta3/share/lua/5.1/?.lua;/home/tom/.cache/nvim/packer_hererocks/2.1.0-beta3/share/lua/5.1/?/init.lua;/home/tom/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/luarocks/rocks-5.1/?.lua;/home/tom/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/luarocks/rocks-5.1/?/init.lua"
-local install_cpath_pattern = "/home/tom/.cache/nvim/packer_hererocks/2.1.0-beta3/lib/lua/5.1/?.so"
+local package_path_str = "/home/tom/.cache/nvim/packer_hererocks/2.1.1694285958/share/lua/5.1/?.lua;/home/tom/.cache/nvim/packer_hererocks/2.1.1694285958/share/lua/5.1/?/init.lua;/home/tom/.cache/nvim/packer_hererocks/2.1.1694285958/lib/luarocks/rocks-5.1/?.lua;/home/tom/.cache/nvim/packer_hererocks/2.1.1694285958/lib/luarocks/rocks-5.1/?/init.lua"
+local install_cpath_pattern = "/home/tom/.cache/nvim/packer_hererocks/2.1.1694285958/lib/lua/5.1/?.so"
 if not string.find(package.path, package_path_str, 1, true) then
   package.path = package.path .. ';' .. package_path_str
 end
@@ -74,11 +74,6 @@ end
 time([[try_loadstring definition]], false)
 time([[Defining packer_plugins]], true)
 _G.packer_plugins = {
-  ["base16-vim"] = {
-    loaded = true,
-    path = "/home/tom/.local/share/nvim/site/pack/packer/start/base16-vim",
-    url = "https://github.com/chriskempson/base16-vim"
-  },
   ["coc.nvim"] = {
     loaded = true,
     path = "/home/tom/.local/share/nvim/site/pack/packer/start/coc.nvim",
@@ -109,10 +104,25 @@ _G.packer_plugins = {
     path = "/home/tom/.local/share/nvim/site/pack/packer/start/nvim-treesitter",
     url = "https://github.com/nvim-treesitter/nvim-treesitter"
   },
+  ["nvim-treesitter-refactor"] = {
+    loaded = true,
+    path = "/home/tom/.local/share/nvim/site/pack/packer/start/nvim-treesitter-refactor",
+    url = "https://github.com/nvim-treesitter/nvim-treesitter-refactor"
+  },
+  ["nvim-ts-rainbow2"] = {
+    loaded = true,
+    path = "/home/tom/.local/share/nvim/site/pack/packer/start/nvim-ts-rainbow2",
+    url = "https://github.com/HiPhish/nvim-ts-rainbow2"
+  },
   ["packer.nvim"] = {
     loaded = true,
     path = "/home/tom/.local/share/nvim/site/pack/packer/start/packer.nvim",
     url = "https://github.com/wbthomason/packer.nvim"
+  },
+  playground = {
+    loaded = true,
+    path = "/home/tom/.local/share/nvim/site/pack/packer/start/playground",
+    url = "https://github.com/nvim-treesitter/playground"
   },
   ["vim-airline"] = {
     loaded = true,
@@ -124,20 +134,10 @@ _G.packer_plugins = {
     path = "/home/tom/.local/share/nvim/site/pack/packer/start/vim-airline-themes",
     url = "https://github.com/vim-airline/vim-airline-themes"
   },
-  ["vim-code-monokai"] = {
+  ["vim-code-dark"] = {
     loaded = true,
-    path = "/home/tom/.local/share/nvim/site/pack/packer/start/vim-code-monokai",
-    url = "https://github.com/jam1garner/vim-code-monokai"
-  },
-  ["vim-cpp-modern"] = {
-    loaded = true,
-    path = "/home/tom/.local/share/nvim/site/pack/packer/start/vim-cpp-modern",
-    url = "https://github.com/bfrg/vim-cpp-modern"
-  },
-  ["vim-visual-multi"] = {
-    loaded = true,
-    path = "/home/tom/.local/share/nvim/site/pack/packer/start/vim-visual-multi",
-    url = "https://github.com/mg979/vim-visual-multi"
+    path = "/home/tom/.local/share/nvim/site/pack/packer/start/vim-code-dark",
+    url = "https://github.com/haberturdeur/vim-code-dark"
   }
 }
 

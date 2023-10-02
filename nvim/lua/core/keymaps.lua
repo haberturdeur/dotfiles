@@ -16,6 +16,11 @@ map('', '<right>', '<nop>')
 map('', 'V-j', '<nop>')
 map('', 'V-k', '<nop>')
 
+map('n', 'gd', '<Plug>(coc-definition)')
+map('n', 'gy', '<Plug>(coc-type-definition)')
+map('n', 'gi', '<Plug>(coc-implementation)')
+map('n', 'gr', '<Plug>(coc-references)')
+
 -- <A-j> :m .+1<CR>==
 -- <A-k> :m .-2<CR>==
 -- <A-j> <Esc>:m .+1<CR>==gi

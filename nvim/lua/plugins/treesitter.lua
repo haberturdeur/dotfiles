@@ -1,6 +1,6 @@
 require'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all" (the five listed parsers should always be installed)
-  ensure_installed = { "c", "cpp", "lua", "vim", "vimdoc", "query" },
+  ensure_installed = { "c", "lua", "vim", "vimdoc", "query" },
 
   -- Install parsers synchronously (only applied to `ensure_installed`)
   sync_install = false,
@@ -16,17 +16,17 @@ require'nvim-treesitter.configs'.setup {
 
   },
 
-  rainbow = {
-    enable = true,
-    query = 'rainbow-parens',
-    strategy = require('ts-rainbow').strategy.global,
-    hlgroups = {
-               'TSRainbowYellow',
-               'TSRainbowBlue',
-               'TSRainbowOrange',
-               'TSRainbowGreen',
-    },
-  },
+--  rainbow = {
+--    enable = true,
+--    query = 'rainbow-parens',
+--    strategy = require('ts-rainbow').strategy.global,
+--    hlgroups = {
+--               'TSRainbowYellow',
+--               'TSRainbowBlue',
+--               'TSRainbowOrange',
+--               'TSRainbowGreen',
+--    },
+--  },
 
   playground = {
     enable = true,
