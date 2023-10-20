@@ -39,6 +39,7 @@ return require('packer').startup(function(use)
 --    use {'mg979/vim-visual-multi', branch = 'master'}
 
     use 'MrcJkb/haskell-tools.nvim'
+    -- use 'airblade/vim-rooter'
 
     -- use 'frazrepo/vim-rainbow'
 
@@ -48,6 +49,7 @@ return require('packer').startup(function(use)
     -- use 'HiPhish/nvim-ts-rainbow2'
     -- use 'tanvirtin/monokai.nvim'
     -- use 'luochen1990/rainbow'
+    use 'jghauser/follow-md-links.nvim'
     if packer_bootstrap then
         require('packer').sync()
     end
