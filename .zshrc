@@ -109,27 +109,27 @@ export COMPOSE_DOCKER_CLI_BUILD=1
 #####################
 # ALIASES           #
 #####################
-alias fd=fdfind
-alias get_idf=". $HOME/esp/esp-idf/export.sh"
-alias install_idf="$HOME/esp/esp-idf/install.sh --enable-ci --enable-pytest all"
-alias load_idf="install_idf && get_idf"
-alias idf.py="idf.py --ccache"
-alias get_mbed="source $HOME/mbed/venv/bin/activate"
-alias open="flatpak run re.sonny.Junction"
-alias ls="ls -l --color=always"
+# alias fd=fdfind # not needed on arch
+alias enable_ccache="export IDF_CCACHE_ENABLE=1"
+alias get_idf="enable_ccache && . $HOME/esp-idf/export.sh"
+alias get_scripts="export PATH=$HOME/scripts:$PATH && echo \"Scripts loaded.\""
+alias install_idf="enable_ccache && $IDF_PATH/install.sh --enable-pytest --enable-ci all"
+alias update_idf="enable_ccache && cd $IDF_PATH && git -C $IDF_PATH pull && git -C $IDF_PATH submodule update --init --recursive && install_idf"
+alias load_idf="install_idf && get_idf && echo \"IDF loaded.\""
+alias ls="ls --color=always"
 alias pip=pip3
 alias hibernate="sudo systemctl hibernate"
-alias sync-todo="rclone bisync drive-simple:.todo local:/home/tom/.todo"
 alias t="todo.sh -d $HOME/.config/todo.txt/config"
 alias incognito=" unset HISTFILE"
 alias vim="nvim"
+alias vi="nvim"
+alias v="nvim"
 alias earc="echo \"connect 20:1B:88:4A:1D:69\" | bluetoothctl"
 alias eard="echo \"disconnect 20:1B:88:4A:1D:69\" | bluetoothctl"
 alias earcn="echo \"connect 78:35:38:B5:D7:32\" | bluetoothctl"
 alias eardn="echo \"disconnect 78:35:38:B5:D7:32\" | bluetoothctl"
 alias ip="ip -c"
 alias lock="loginctl lock-session"
-alias sync="clone bisync drive-simple:Logseq local:/home/tom/Documents/Logseq >/dev/null 2>&1"
 alias prj="cd ~/Projects"
 alias matrix-commander=" matrix-commander -s .config/matrix-commander/store"
 alias mc-read="matrix-commander --listen-self --tail -s .config/matrix-commander/store"

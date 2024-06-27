@@ -52,6 +52,11 @@ return require('packer').startup(function(use)
     -- use 'luochen1990/rainbow'
     use 'jghauser/follow-md-links.nvim'
     use "nvim-lua/plenary.nvim"
+    use 'tpope/vim-fugitive'
+    use 'tpope/vim-commentary'
+    use 'tpope/vim-surround'
+    use 'shumphrey/fugitive-gitlab.vim'
+    use 'tpope/vim-rhubarb'
     if packer_bootstrap then
         require('packer').sync()
     end

@@ -7,5 +7,13 @@
 [credential]
 	helper = libsecret
 	username = tomas.rohlinek@espressif.com
+[submodule]
+	recurse = false
+[rerere]
+	autoUpdate = true
+	enabled = true
 [maintenance]
-	repo = /home/tom/Projects/tet
+	repo = /home/tom/esp-idf
+[alias]
+	adog = log --all --decorate --oneline --graph
+	pullsub = ! git pull && git submodule update --init --recursive
