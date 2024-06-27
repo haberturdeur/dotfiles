@@ -1,9 +1,11 @@
 [user]
-	email = tomas.rohlinek@espressif.com
+	email = rohlinektomas@gmail.com
 	name = Tomáš Rohlínek
-	signingkey = BDE1CEDD10F7E372!
+	signingkey = 288BC7E47BF1409B
 [commit]
 	gpgsign = true
 [credential]
 	helper = libsecret
 	username = tomas.rohlinek@espressif.com
+[maintenance]
+	repo = /home/tom/Projects/tet

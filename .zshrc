@@ -110,9 +110,13 @@ export COMPOSE_DOCKER_CLI_BUILD=1
 # ALIASES           #
 #####################
 alias fd=fdfind
-alias get_idf=". $HOME/esp-idf/export.sh"
+alias get_idf=". $HOME/esp/esp-idf/export.sh"
+alias install_idf="$HOME/esp/esp-idf/install.sh --enable-ci --enable-pytest all"
+alias load_idf="install_idf && get_idf"
+alias idf.py="idf.py --ccache"
+alias get_mbed="source $HOME/mbed/venv/bin/activate"
 alias open="flatpak run re.sonny.Junction"
-alias ls="ls --color=always"
+alias ls="ls -l --color=always"
 alias pip=pip3
 alias hibernate="sudo systemctl hibernate"
 alias sync-todo="rclone bisync drive-simple:.todo local:/home/tom/.todo"
@@ -190,3 +194,4 @@ export IN_ZINIT=1
 [ -f "/home/tom/.ghcup/env" ] && source "/home/tom/.ghcup/env" # ghcup-env
 
 export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/ssh-agent.socket
+

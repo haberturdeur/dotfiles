@@ -250,7 +250,7 @@ exec --no-startup-id redshift
 
 exec --no-startup-id discord
 
-exec --no-startup-id mailspring
+exec --no-startup-id mailspring --password-store="gnome-libsecret"
 
 set $display_setup "xrandr --output HDMI-2 --off && autorandr --change"
 set $bg_setup "feh --bg-fill Pictures/desktop/overthinker_by_fmcastro_de7rpy4.png --bg-fill Pictures/desktop/minuet_of_the_fallen_by_fmcastro_de4ykx0.png --bg-fill Pictures/desktop/tears_from_the_past_by_fmcastro_deafjmb.jpg"

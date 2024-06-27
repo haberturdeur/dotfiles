@@ -16,5 +16,7 @@ vim.g.airline_symbols.dirty='⚡'
 --vim.g.codedark_term256=1
 vim.g.codedark_transparent=1
 
+-- vim.cmd([[colorscheme parchment]])
 vim.cmd([[colorscheme codedark]])
+-- codedark
 -- vim.cmd([[syntax enable]])

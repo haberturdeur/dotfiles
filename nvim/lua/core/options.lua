@@ -10,3 +10,5 @@ vim.opt.expandtab = true
 vim.opt.softtabstop = 4
 vim.opt.clipboard = "unnamedplus"
 vim.opt.termguicolors = true
+
+vim.cmd('delcommand EditQuery')
