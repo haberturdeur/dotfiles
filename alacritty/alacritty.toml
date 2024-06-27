@@ -1,4 +1,4 @@
-import = ["/home/tom/.config/alacritty/color.toml"]
+#import = ["/home/tom/.config/alacritty/color.toml"]
 
 [env]
 TERM = "xterm-256color"
