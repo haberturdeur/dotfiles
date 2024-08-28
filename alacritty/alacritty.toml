@@ -3,6 +3,9 @@
 [env]
 TERM = "xterm-256color"
 
+[terminal]
+osc52 = "CopyPaste"
+
 [font.normal]
 family = "DejaVu Sans M Nerd Font"
 
@@ -22,6 +25,9 @@ mouse = "Middle"
 
 [scrolling]
 history = 10000
+
+[selection]
+save_to_clipboard = true
 
 [window]
 decorations = "None"

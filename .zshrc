@@ -18,8 +18,12 @@ export PATH=/home/tom/.local/bin/:$PATH
 export PATH=/home/tom/intelFPGA_lite/20.1/quartus/bin/:$PATH
 export PATH=$HOME/scripts:$PATH
 export PATH=/opt/microchip/xc8/v2.40/bin:/opt/microchip/xc8/v2.40/pic/bin:$PATH
+export PATH=$HOME/.cargo/bin:$PATH
 
-export EDITOR="nvim"
+export EDITOR="kak"
+export VISUAL="kak"
+export PAGER="bat"
+export NNN_OPTS="eH"
 
 export IDF_PATH=$HOME/esp-idf
 
@@ -111,7 +115,7 @@ export COMPOSE_DOCKER_CLI_BUILD=1
 #####################
 # alias fd=fdfind # not needed on arch
 alias enable_ccache="export IDF_CCACHE_ENABLE=1"
-alias get_idf="enable_ccache && . $HOME/esp-idf/export.sh"
+alias get_idf="enable_ccache && . $IDF_PATH/export.sh"
 alias get_scripts="export PATH=$HOME/scripts:$PATH && echo \"Scripts loaded.\""
 alias install_idf="enable_ccache && $IDF_PATH/install.sh --enable-pytest --enable-ci all"
 alias update_idf="enable_ccache && cd $IDF_PATH && git -C $IDF_PATH pull && git -C $IDF_PATH submodule update --init --recursive && install_idf"

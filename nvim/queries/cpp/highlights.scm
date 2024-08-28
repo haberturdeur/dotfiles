@@ -206,7 +206,7 @@
 ] @keyword.coroutine.return
 
 [
- "virtual"
+ ; "virtual"
  "final"
 ] @type.qualifier
 

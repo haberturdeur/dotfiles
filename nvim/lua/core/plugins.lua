@@ -52,33 +52,37 @@ return require('packer').startup(function(use)
     -- use 'luochen1990/rainbow'
     use 'jghauser/follow-md-links.nvim'
     use "nvim-lua/plenary.nvim"
-    use 'tpope/vim-fugitive'
+    -- use 'tpope/vim-fugitive'
     use 'tpope/vim-commentary'
     use 'tpope/vim-surround'
-    use 'shumphrey/fugitive-gitlab.vim'
-    use 'tpope/vim-rhubarb'
+    -- use 'shumphrey/fugitive-gitlab.vim'
+    -- use 'tpope/vim-rhubarb'
+    -- use {
+    --     "harrisoncramer/gitlab.nvim",
+    --     requires = {
+    --         "MunifTanjim/nui.nvim",
+    --         "nvim-lua/plenary.nvim",
+    --         "sindrets/diffview.nvim",
+    --         "stevearc/dressing.nvim", -- Recommended but not required. Better UI for pickers.
+    --         "nvim-tree/nvim-web-devicons", -- Recommended but not required. Icons in discussion tree.
+    --     },
+    --     build = function()
+    --         require("gitlab.server").build()
+    --     end,
+    --     branch = "develop",
+    --     config = function()
+    --         require("diffview") -- We require some global state from diffview
+    --         local gitlab = require("gitlab")
+    --         gitlab.setup()
+    --     end,
+    -- }
+    use {
+      'lewis6991/gitsigns.nvim',
+      requires = { 'nvim-lua/plenary.nvim' },
+    }
     if packer_bootstrap then
         require('packer').sync()
     end
-    use {
-        "harrisoncramer/gitlab.nvim",
-        requires = {
-            "MunifTanjim/nui.nvim",
-            "nvim-lua/plenary.nvim",
-            "sindrets/diffview.nvim",
-            "stevearc/dressing.nvim", -- Recommended but not required. Better UI for pickers.
-            "nvim-tree/nvim-web-devicons", -- Recommended but not required. Icons in discussion tree.
-        },
-        build = function()
-            require("gitlab.server").build()
-        end,
-        branch = "develop",
-        config = function()
-            require("diffview") -- We require some global state from diffview
-            local gitlab = require("gitlab")
-            gitlab.setup()
-        end,
-    }
 end)
 
 
