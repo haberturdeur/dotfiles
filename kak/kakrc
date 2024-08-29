@@ -1,10 +1,7 @@
-colorscheme one-dark
-
-add-highlighter global/ number-lines -hlcursor -separator " "
-add-highlighter global/ show-matching
-
 set-option global tabstop 4
 set-option global indentwidth 4
+
+eval %sh{ kak-tree-sitter -dks --init $kak_session }
 
 source "%val{config}/plugins/plug.kak/rc/plug.kak"
 plug "andreyorst/plug.kak" noload
@@ -138,3 +135,12 @@ def toggle-nnn -docstring "open explorer in popup" %{
 alias global E toggle-nnn
 
 hook global WinCreate .* %{ git show-diff }
+
+
+add-highlighter -override global/ number-lines -hlcursor -separator " "
+define-command -override tree-sitter-user-after-highlighter %{
+    add-highlighter -override buffer/ number-lines -hlcursor -separator " "
+    add-highlighter -override buffer/show-matching show-matching
+}
+
+colorscheme one-dark-ts

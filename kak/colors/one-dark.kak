@@ -1,88 +1,115 @@
-# One-dark theme for Kakoune
+# One Dark
 
-# Color palette
-# declare-option str black 'rgb:282c34'
-declare-option str black default
-declare-option str gray 'rgb:5C6370'
-declare-option str dark 'rgb:1e2127'
-declare-option str white 'rgb:abb2bf'
-declare-option str blue 'rgb:61afef'
-declare-option str cyan 'rgb:50cacd'
-declare-option str aqua 'rgb:5accaf'
-declare-option str green 'rgb:98c379'
-declare-option str amber 'rgb:e5c07b'
-declare-option str orange 'rgb:d19a66'
-declare-option str pink 'rgb:de6a73'
-declare-option str purple 'rgb:c678dd'
-declare-option str red 'rgb:efa6a2'
-declare-option str yellow 'rgb:c8c874'
-declare-option str azure 'rgb:74c3e4'
-declare-option str dimgray 'rgb:454b4e'
-declare-option str psel 'rgba:46465080'
-declare-option str ssel 'rgba:3c3c5080'
+declare-option str fg "abb2bf"
+declare-option str bg "282c34"
+declare-option str subbg "373c47"
 
-declare-option str background %opt{black}
-declare-option str dimmed_background %opt{gray}
-declare-option str foreground %opt{white}
+declare-option str lightred "e06c75"
+declare-option str darkred "be5046"
+declare-option str green "98c379"
+declare-option str lightorange "e5c07b"
+declare-option str darkorange "d19a66"
+declare-option str blue "61afef"
+declare-option str magenta "c678dd"
+declare-option str cyan "56b6c2"
 
-# Reference
-# https://github.com/mawww/kakoune/blob/master/colors/default.kak
-# For code
-set-face global value "%opt{orange}"
-set-face global type "%opt{cyan}"
-set-face global variable "%opt{orange}"
-set-face global module "%opt{white}"
-set-face global function "%opt{blue}"
-set-face global string "%opt{green}"
-set-face global keyword "%opt{purple}"
-set-face global operator "%opt{purple}"
-set-face global attribute "%opt{blue}"
-set-face global bracket "%opt{white}"
-set-face global arguement "%opt{orange}"
-set-face global comma "%opt{white}"
-set-face global comment "%opt{gray}+i"
-set-face global docstring "%opt{gray}+i"
-set-face global meta "%opt{purple}"
-set-face global builtin "%opt{cyan}"
-set-face global class "%opt{amber}"
-set-face global self "%opt{pink}"
-set-face global constant "%opt{white}+b"
+declare-option str comment "5c6370"
 
-# For markup
-set-face global title "%opt{pink}"
-set-face global header "%opt{orange}"
-set-face global bold "%opt{pink}"
-set-face global italic "%opt{purple}"
-set-face global mono "%opt{green}"
-set-face global block "%opt{cyan}"
-set-face global link "%opt{green}"
-set-face global bullet "%opt{green}"
-set-face global list "%opt{white}"
+declare-option str selectionalpha "35"
 
-# Builtin faces
-set-face global Default "%opt{white},%opt{black}"
-# set-face global Default "%opt{white},default"
-set-face global PrimarySelection "default,%opt{psel}"
-set-face global SecondarySelection "default,%opt{ssel}"
-set-face global PrimaryCursor "%opt{dark},%opt{purple}"
-set-face global SecondaryCursor "%opt{dark},%opt{blue}"
-set-face global PrimaryCursorEol "%opt{dark},%opt{cyan}"
-set-face global SecondaryCursorEol "%opt{dark},%opt{amber}"
-set-face global LineNumbers "%opt{gray},%opt{black}"
-set-face global LineNumberCursor "%opt{white},%opt{black}+b"
-set-face global LineNumbersWrapped "%opt{gray},%opt{black}+i"
-set-face global MenuForeground "%opt{dark},%opt{aqua}+b"
-set-face global MenuBackground "%opt{white},%opt{dark}"
-set-face global MenuInfo "%opt{orange},%opt{dark}"
-set-face global Information "%opt{yellow},%opt{black}"
-set-face global Error "%opt{red},%opt{black}"
-set-face global StatusLine "%opt{white},%opt{black}"
-set-face global StatusLineMode "%opt{green},%opt{black}"
-set-face global StatusLineInfo "%opt{purple},%opt{black}"
-set-face global StatusLineValue "%opt{orange},%opt{black}"
-set-face global StatusCursor "%opt{white},%opt{blue}"
-set-face global Prompt "%opt{green},%opt{black}"
-set-face global MatchingChar "%opt{black},%opt{blue}"
-set-face global Whitespace "%opt{dimgray},%opt{black}+f"
-set-face global WrapMarker Whitespace
-set-face global BufferPadding "%opt{gray},%opt{black}"
+# Menus do not support transparency, so we must hardcode the selection + sub bg colors
+declare-option str menuselection "3f5369"
+
+# CODE
+
+set-face global value "rgb:%opt{darkorange}"
+set-face global type "rgb:%opt{lightorange}"
+set-face global variable "rgb:%opt{lightred}"
+set-face global module "rgb:%opt{lightorange}"
+set-face global function "rgb:%opt{blue}"
+set-face global string "rgb:%opt{green}"
+set-face global keyword "rgb:%opt{magenta}"
+set-face global operator "rgb:%opt{fg}"
+set-face global attribute "rgb:%opt{cyan}"
+set-face global comment "rgb:%opt{comment}"
+set-face global documentation "rgb:%opt{comment}"
+set-face global meta "rgb:%opt{cyan}"
+set-face global builtin "rgb:%opt{lightorange}"
+
+# MARKUP
+
+set-face global title "rgb:%opt{darkorange}"
+set-face global header "rgb:%opt{green}"
+set-face global mono "rgb:%opt{cyan}"
+set-face global block "rgb:%opt{magenta}"
+set-face global link "rgb:%opt{blue}"
+set-face global bullet "rgb:%opt{lightorange}"
+set-face global list "rgb:%opt{fg}"
+
+# BUILTIN
+
+set-face global Default "rgb:%opt{fg},rgb:%opt{bg}"
+set-face global PrimarySelection "default,rgba:%opt{blue}%opt{selectionalpha}"
+set-face global SecondarySelection "default,rgba:%opt{green}%opt{selectionalpha}"
+set-face global PrimaryCursor "rgb:%opt{bg},rgb:%opt{blue}"
+set-face global SecondaryCursor "rgb:%opt{bg},rgb:%opt{green}"
+set-face global PrimaryCursorEol "rgb:%opt{bg},rgb:%opt{lightred}"
+set-face global SecondaryCursorEol "rgb:%opt{bg},rgb:%opt{cyan}"
+set-face global LineNumbers "rgb:%opt{comment}"
+set-face global LineNumberCursor "rgb:%opt{darkorange}"
+set-face global LineNumbersWrapped "rgb:%opt{bg},rgb:%opt{bg}"
+set-face global MenuForeground "rgb:%opt{fg},rgb:%opt{menuselection}"
+set-face global MenuBackground "rgb:%opt{fg},rgb:%opt{subbg}"
+set-face global MenuInfo "rgb:%opt{green}"
+set-face global Information "rgb:%opt{fg},rgb:%opt{subbg}"
+set-face global Error "rgb:%opt{lightred}"
+set-face global StatusLine "rgb:%opt{fg},rgb:%opt{subbg}"
+set-face global StatusLineMode "rgb:%opt{darkorange}"
+set-face global StatusLineInfo "rgb:%opt{blue}"
+set-face global StatusLineValue "rgb:%opt{fg}"
+set-face global StatusCursor "rgb:%opt{bg},rgb:%opt{blue}"
+set-face global Prompt "rgb:%opt{blue}"
+set-face global MatchingChar +bu
+set-face global BufferPadding "rgb:%opt{bg},rgb:%opt{bg}"
+set-face global Whitespace "rgb:%opt{comment}"
+
+# PLUGINS
+
+# kak-lsp
+set-face global InlayHint "+d@type"
+set-face global parameter "+i@variable"
+set-face global enum "rgb:%opt{cyan}"
+set-face global InlayDiagnosticError "rgb:%opt{lightred}"
+set-face global InlayDiagnosticWarning "rgb:%opt{lightorange}"
+set-face global InlayDiagnosticInfo "rgb:%opt{blue}"
+set-face global InlayDiagnosticHint "rgb:%opt{green}"
+set-face global LineFlagError "rgb:%opt{lightred}"
+set-face global LineFlagWarning "rgb:%opt{lightorange}"
+set-face global LineFlagInfo "rgb:%opt{blue}"
+set-face global LineFlagHint "rgb:%opt{green}"
+set-face global DiagnosticError ",,rgb:%opt{lightred}+c"
+set-face global DiagnosticWarning ",,rgb:%opt{lightorange}+c"
+set-face global DiagnosticInfo ",,rgb:%opt{blue}+c"
+set-face global DiagnosticHint ",,rgb:%opt{green}+c"
+# Infobox faces
+set-face global InfoDefault Information
+set-face global InfoBlock block
+set-face global InfoBlockQuote block
+set-face global InfoBullet bullet
+set-face global InfoHeader header
+set-face global InfoLink link
+set-face global InfoLinkMono header
+set-face global InfoMono mono
+set-face global InfoRule comment
+set-face global InfoDiagnosticError InlayDiagnosticError
+set-face global InfoDiagnosticHint InlayDiagnosticHint
+set-face global InfoDiagnosticInformation InlayDiagnosticInfo
+set-face global InfoDiagnosticWarning InlayDiagnosticWarning
+
+# kak-rainbower
+try %{ set-option global rainbow_colors "rgb:%opt{lightorange}" "rgb:%opt{magenta}" "rgb:%opt{blue}" }
+
+# For backwards compatibility
+define-command -override -hidden one-enable-fancy-underlines %{
+    echo -debug "one-enable-fancy-underlines is deprecated - curly underlines are enabled by default"
+}
