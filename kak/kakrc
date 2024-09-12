@@ -1,6 +1,8 @@
 set-option global tabstop 4
 set-option global indentwidth 4
 
+declare-option str explorer_path "."
+
 eval %sh{ kak-tree-sitter -dks --init $kak_session }
 
 source "%val{config}/plugins/plug.kak/rc/plug.kak"
@@ -33,8 +35,13 @@ plug "gustavo-hms/luar" %{
   require-module luar
 }
 
+plug "crizan/kak-rainbower" %{
+    set-option global rainbow_mode 0
+    set-option global rainbow_colors rgb:ffd700 rgb:da70d6 rgb:179fff
+}
+
 plug "kakounedotcom/prelude.kak" %{
-	require-module prelude
+    require-module prelude
 }
 
 plug "kakounedotcom/connect.kak" %{
@@ -47,6 +54,21 @@ plug "kak-lsp/kak-lsp" do %{
 
 hook global WinSetOption filetype=(python|javascript|typescript|c|cpp) %{
     lsp-enable-window
+}
+
+hook global WinSetOption filetype=.* %{
+    set-option window explorer_path %sh{dirname "$kak_buffile"}
+    echo %opt{explorer_path}
+}
+
+plug "andreyorst/smarttab.kak" defer smarttab %{
+    # when `backspace' is pressed, 4 spaces are deleted at once
+    set-option global softtabstop 4
+} config %{
+    hook global BufOpenFile .* expandtab
+    hook global BufNewFile  .* expandtab
+    # these languages will use `noexpandtab' behavior
+    hook global WinSetOption filetype=(makefile|gas) noexpandtab
 }
 
 plug 'https://gitlab.com/kstr0k/mru-files.kak.git' %{
@@ -119,28 +141,59 @@ set-face global PrimaryCursorEolInsert PrimaryCursorInsert
 set-face global PrimaryCursorEol PrimaryCursorEolNormal
 
 hook global ModeChange (push|pop):.*insert %{
-	set-face window PrimaryCursor PrimaryCursorInsert
-	set-face window PrimaryCursorEol PrimaryCursorEolInsert
+    set-face window PrimaryCursor PrimaryCursorInsert
+    set-face window PrimaryCursorEol PrimaryCursorEolInsert
 }
 
 hook global ModeChange (push|pop):insert:.* %{
-	set-face window PrimaryCursor PrimaryCursorNormal
-	set-face window PrimaryCursorEol PrimaryCursorEolNormal
+    set-face window PrimaryCursor PrimaryCursorNormal
+    set-face window PrimaryCursorEol PrimaryCursorEolNormal
 }
 
+# def toggle-nnn -docstring "open explorer in popup" %{
+#     popup --title open --kak-script %{edit %opt{popup_output}} -- nnn -p -
+# }
+
 def toggle-nnn -docstring "open explorer in popup" %{
-    popup --title open --kak-script %{edit %opt{popup_output}} -- nnn -p -
+    popup --title open --kak-script %{
+        evaluate-commands %sh{
+            selected_file="$kak_opt_popup_output"
+            if [ -n "$selected_file" ]; then
+                parent_dir=$(dirname "$selected_file")
+                printf 'set-option window explorer_path "%s"\n' "$parent_dir"
+                printf 'edit "%s"\n' "$selected_file"
+            else
+                printf 'echo -markup "{Warning}No file selected. Operation aborted."\n'
+            fi
+        }
+    } -- nnn -p - %opt{explorer_path}
 }
 
 alias global E toggle-nnn
 
-hook global WinCreate .* %{ git show-diff }
+# enable flag-lines hl for git diff
+hook global WinCreate .* %{
+    add-highlighter window/git-diff flag-lines Default git_diff_flags
 
+}
+# trigger update diff if inside git dir
+hook global BufOpenFile .* %{
+    evaluate-commands -draft %sh{
+        cd $(dirname "$kak_buffile")
+        if [ $(git rev-parse --git-dir 2>/dev/null) ]; then
+            for hook in WinCreate BufReload BufWritePost; do
+                printf "hook buffer -group git-update-diff %s .* 'git update-diff'\n" "$hook"
+            done
+        fi
+    }
+}
 
 add-highlighter -override global/ number-lines -hlcursor -separator " "
 define-command -override tree-sitter-user-after-highlighter %{
     add-highlighter -override buffer/ number-lines -hlcursor -separator " "
     add-highlighter -override buffer/show-matching show-matching
+
+    rainbow-enable-window
 }
 
 colorscheme one-dark-ts
