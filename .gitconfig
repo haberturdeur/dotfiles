@@ -16,6 +16,7 @@
 [alias]
 	adog = log --all --decorate --oneline --graph
 	pullsub = ! git pull && git submodule update --init --recursive
+	l = log --oneline
 
 [include]
 	path = ~/.gitconfig.identity

@@ -115,9 +115,9 @@ map global object D '<a-semicolon>lsp-diagnostic-object<ret>' -docstring 'LSP er
 
 hook global RawKey <mouse:press:middle:.*> %{ exec !xclip<space>-o<ret> }
 
-map global normal P '!xclip -o -selection clipboard<ret>'
-map global normal p '<a-!>xsel --output --clipboard<ret>'
-map global normal R '|xsel --output --clipboard<ret>'
+map global normal <c-P> '!xclip -o -selection clipboard<ret>'
+map global normal <c-p> '<a-!>xsel --output --clipboard<ret>'
+map global normal <c-R> '|xsel --output --clipboard<ret>'
 map -docstring "open fzf" global user f ": fzf-mode<ret>"
 
 # Explore files with nnn

@@ -197,5 +197,9 @@ export IN_ZINIT=1
 
 [ -f "/home/tom/.ghcup/env" ] && source "/home/tom/.ghcup/env" # ghcup-env
 
+if [ -f /usr/share/nnn/quitcd/quitcd.bash_sh_zsh ]; then
+    source /usr/share/nnn/quitcd/quitcd.bash_sh_zsh
+fi
+
 export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/ssh-agent.socket
 
