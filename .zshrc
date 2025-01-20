@@ -19,6 +19,7 @@ export PATH=/home/tom/intelFPGA_lite/20.1/quartus/bin/:$PATH
 export PATH=$HOME/scripts:$PATH
 export PATH=/opt/microchip/xc8/v2.40/bin:/opt/microchip/xc8/v2.40/pic/bin:$PATH
 export PATH=$HOME/.cargo/bin:$PATH
+export PATH=$HOME/matlab/bin:$PATH
 
 export EDITOR="kak"
 export VISUAL="kak"
@@ -138,6 +139,7 @@ alias prj="cd ~/Projects"
 alias matrix-commander=" matrix-commander -s .config/matrix-commander/store"
 alias mc-read="matrix-commander --listen-self --tail -s .config/matrix-commander/store"
 alias haberun="export HOME=$HOME/.profiles/haberun; discord;"
+alias matlab="LD_PRELOAD=\"/usr/lib/libstdc++.so.6\" matlab"
 
 #####################
 # FZF SETTINGS      #

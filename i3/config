@@ -242,8 +242,6 @@ bar {
                 -t solarized-powerline
 }
 
-# exec --no-startup-id xrandr --output HDMI-2 --auto --above eDP-1 &
-
 exec --no-startup-id dunst -config ~/.config/dunst/dunstrc
 
 exec --no-startup-id redshift
@@ -253,22 +251,18 @@ exec --no-startup-id discord
 exec --no-startup-id mailspring --password-store="gnome-libsecret"
 
 set $display_setup "xrandr --output HDMI-2 --off && autorandr --change"
-set $bg_setup "feh --bg-fill Pictures/desktop/overthinker_by_fmcastro_de7rpy4.png --bg-fill Pictures/desktop/minuet_of_the_fallen_by_fmcastro_de4ykx0.png --bg-fill Pictures/desktop/tears_from_the_past_by_fmcastro_deafjmb.jpg"
-
+set $bg_setup "feh --bg-fill Pictures/desktop/overthinker_by_fmcastro_de7rpy4.png --bg-fill Pictures/desktop/minuet_of_the_fallen_by_fmcastro_de4ykx0.png --bg-fill Pictures/desktop/clajkr5fox781-transformed.webp"
 
 exec_always --no-startup-id $display_setup
-exec_always --no-startup-id $bg_setup
 
-# exec --no-startup-id flatpak run re.sonny.Junction
-
-bindsym XF86Display exec --no-startup-id "xrandr --output HDMI-2 --off && autorandr --change && feh --bg-fill Pictures/desktop/overthinker_by_fmcastro_de7rpy4.png --bg-fill Pictures/desktop/minuet_of_the_fallen_by_fmcastro_de4ykx0.png --bg-fill Pictures/desktop/tears_from_the_past_by_fmcastro_deafjmb.jpg"
+bindsym XF86Display exec --no-startup-id "autorandr --change"
 
 bindsym Print exec --no-startup-id "flameshot gui"
 
 bindsym $mod+Shift+x move workspace to output up
 
 workspace 1 output eDP-1
-workspace 2 output DP2-1
-workspace 8 output DP2-2
-workspace 9 output DP2-2
+workspace 2 output DP2-1 DP1-1
+workspace 8 output DP2-2 HDMI2
+workspace 9 output DP2-2 HDMI2
 workspace 10 output eDP-1

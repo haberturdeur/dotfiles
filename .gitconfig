@@ -1,6 +1,7 @@
 [user]
 	name = Tomáš Rohlínek
 	useConfigOnly = true
+	email = rohlinektomas@gmail.com
 [commit]
 	gpgsign = true
 [credential]

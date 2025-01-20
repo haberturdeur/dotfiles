@@ -29,6 +29,9 @@ plug "andreyorst/powerline.kak" defer kakoune-themes %{
   powerline-start
 }
 
+plug "occivink/kakoune-sudo-write" %{
+}
+
 evaluate-commands %sh{kak-popup init}
 
 plug "gustavo-hms/luar" %{
@@ -52,8 +55,13 @@ plug "kak-lsp/kak-lsp" do %{
   cargo install --locked --force --path .
 }
 
-hook global WinSetOption filetype=(python|javascript|typescript|c|cpp) %{
+hook global WinSetOption filetype=(python|javascript|typescript|c|cpp|latex|haskell) %{
     lsp-enable-window
+}
+
+hook global WinSetOption filetype=(haskell) %{
+    lsp-inlay-hints-enable buffer
+    lsp-inlay-code-lenses-enable buffer
 }
 
 hook global WinSetOption filetype=.* %{
@@ -105,7 +113,7 @@ hook global InsertCompletionShow .* %{
 }
 
 map global user l %{:enter-user-mode lsp<ret>} -docstring "LSP mode"
-map global insert <tab> '<a-;>:try lsp-snippets-select-next-placeholders catch %{ execute-keys -with-hooks <lt>tab> }<ret>' -docstring 'Select next snippet placeholder'
+map global insert <c-tab> '<a-;>:try lsp-snippets-select-next-placeholders catch %{ execute-keys -with-hooks <lt>tab> }<ret>' -docstring 'Select next snippet placeholder'
 map global object a '<a-semicolon>lsp-object<ret>' -docstring 'LSP any symbol'
 map global object <a-a> '<a-semicolon>lsp-object<ret>' -docstring 'LSP any symbol'
 map global object f '<a-semicolon>lsp-object Function Method<ret>' -docstring 'LSP function or method'
