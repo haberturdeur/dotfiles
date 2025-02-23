@@ -39,6 +39,12 @@ plug "gustavo-hms/luar" %{
 }
 
 plug "crizan/kak-rainbower" %{
+    evaluate-commands %sh{
+        if [ ! -f "$kak_config/plugins/kak-rainbower/rc/rainbower" ]; then
+            echo "rainbower missing, compiling" 1>&2
+            echo "rainbower-compile"
+        fi
+    }
     set-option global rainbow_mode 0
     set-option global rainbow_colors rgb:ffd700 rgb:da70d6 rgb:179fff
 }
@@ -168,7 +174,7 @@ def toggle-nnn -docstring "open explorer in popup" %{
             selected_file="$kak_opt_popup_output"
             if [ -n "$selected_file" ]; then
                 parent_dir=$(dirname "$selected_file")
-                printf 'set-option window explorer_path "%s"\n' "$parent_dir"
+                printf 'set-option global explorer_path "%s"\n' "$parent_dir"
                 printf 'edit "%s"\n' "$selected_file"
             else
                 printf 'echo -markup "{Warning}No file selected. Operation aborted."\n'

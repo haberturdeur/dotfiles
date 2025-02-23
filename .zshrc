@@ -14,8 +14,8 @@ export PATH=/snap/bin/:$PATH
 
 export PATH=/home/linuxbrew/.linuxbrew/bin:$PATH
 export PATH=/usr/local/lib/node_modules/:$PATH
-export PATH=/home/tom/.local/bin/:$PATH
-export PATH=/home/tom/intelFPGA_lite/20.1/quartus/bin/:$PATH
+export PATH=$HOME/.local/bin/:$PATH
+export PATH=$HOME/intelFPGA_lite/20.1/quartus/bin/:$PATH
 export PATH=$HOME/scripts:$PATH
 export PATH=/opt/microchip/xc8/v2.40/bin:/opt/microchip/xc8/v2.40/pic/bin:$PATH
 export PATH=$HOME/.cargo/bin:$PATH
@@ -127,16 +127,8 @@ alias hibernate="sudo systemctl hibernate"
 alias t="todo.sh -d $HOME/.config/todo.txt/config"
 alias incognito=" unset HISTFILE"
 alias vim="nvim"
-alias vi="nvim"
-alias v="nvim"
-alias earc="echo \"connect 20:1B:88:4A:1D:69\" | bluetoothctl"
-alias eard="echo \"disconnect 20:1B:88:4A:1D:69\" | bluetoothctl"
-alias earcn="echo \"connect 78:35:38:B5:D7:32\" | bluetoothctl"
-alias eardn="echo \"disconnect 78:35:38:B5:D7:32\" | bluetoothctl"
 alias ip="ip -c"
 alias lock="loginctl lock-session"
-alias prj="cd ~/Projects"
-alias matrix-commander=" matrix-commander -s .config/matrix-commander/store"
 alias mc-read="matrix-commander --listen-self --tail -s .config/matrix-commander/store"
 alias haberun="export HOME=$HOME/.profiles/haberun; discord;"
 alias matlab="LD_PRELOAD=\"/usr/lib/libstdc++.so.6\" matlab"
@@ -163,24 +155,24 @@ timezsh() {
   for i in $(seq 1 10); do /usr/bin/time $shell -i -c exit; done
 }
 
-# PATH="/home/tom/perl5/bin${PATH:+:${PATH}}"; export PATH;
-# PERL5LIB="/home/tom/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
-# PERL_LOCAL_LIB_ROOT="/home/tom/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
-# PERL_MB_OPT="--install_base \"/home/tom/perl5\""; export PERL_MB_OPT;
-# PERL_MM_OPT="INSTALL_BASE=/home/tom/perl5"; export PERL_MM_OPT;
+# PATH="$HOME/perl5/bin${PATH:+:${PATH}}"; export PATH;
+# PERL5LIB="$HOME/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+# PERL_LOCAL_LIB_ROOT="$HOME/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+# PERL_MB_OPT="--install_base \"$HOME/perl5\""; export PERL_MB_OPT;
+# PERL_MM_OPT="INSTALL_BASE=$HOME/perl5"; export PERL_MM_OPT;
 
 [ -f /opt/miniconda3/etc/profile.d/conda.sh ] && source /opt/miniconda3/etc/profile.d/conda.sh
 
 # >>> conda initialize >>>
 # # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/tom/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+__conda_setup="$('$HOME/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
 eval "$__conda_setup"
 else
-if [ -f "/home/tom/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/tom/miniconda3/etc/profile.d/conda.sh"
+if [ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "$HOME/miniconda3/etc/profile.d/conda.sh"
     else
-        export PATH="/home/tom/miniconda3/bin:$PATH"
+        export PATH="$HOME/miniconda3/bin:$PATH"
     fi
 fi
 unset __conda_setup
@@ -197,7 +189,7 @@ export IN_ZINIT=1
 # To customize prompt, run `p10k configure` or edit ~/.config/shell/zsh/p10k.zsh.
 [[ ! -f ~/.config/shell/zsh/p10k.zsh ]] || source ~/.config/shell/zsh/p10k.zsh
 
-[ -f "/home/tom/.ghcup/env" ] && source "/home/tom/.ghcup/env" # ghcup-env
+[ -f "$HOME/.ghcup/env" ] && source "$HOME/.ghcup/env" # ghcup-env
 
 if [ -f /usr/share/nnn/quitcd/quitcd.bash_sh_zsh ]; then
     source /usr/share/nnn/quitcd/quitcd.bash_sh_zsh
