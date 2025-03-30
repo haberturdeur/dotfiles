@@ -153,7 +153,7 @@ set-face global LineFlagWarning "%opt{none}"
 set-face global LineFlagInfo "%opt{none}"
 set-face global LineFlagHint "%opt{none}"
 
-set-face global DiagnosticError ",,%opt{lightred}+c"
+set-face global DiagnosticError ",,%opt{lightred}+c@fg"
 set-face global DiagnosticWarning ",,%opt{yellow}+c"
 set-face global DiagnosticInfo ",,%opt{blue}+c"
 set-face global DiagnosticHint ",,%opt{green}+c"

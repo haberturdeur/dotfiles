@@ -3,7 +3,7 @@ set-option global indentwidth 4
 
 declare-option str explorer_path "."
 
-eval %sh{ kak-tree-sitter -dks --init $kak_session }
+eval %sh{ kak-tree-sitter --with-text-objects -dks --init $kak_session}
 
 source "%val{config}/plugins/plug.kak/rc/plug.kak"
 plug "andreyorst/plug.kak" noload
@@ -57,12 +57,13 @@ plug "kakounedotcom/connect.kak" %{
     require-module connect
 }
 
-plug "kak-lsp/kak-lsp" do %{
-  cargo install --locked --force --path .
-}
-
 hook global WinSetOption filetype=(python|javascript|typescript|c|cpp|latex|haskell) %{
-    lsp-enable-window
+    eval %sh{kak-lsp}
+    set global lsp_debug true
+    lsp-enable
+    set global lsp_cmd "kak-lsp -s %val{session} -vvv --log /tmp/kak-lsp.log"
+    echo -debug "Enabling LSP for filtetype %opt{filetype}"
+    hook -always global KakEnd .* lsp-exit
 }
 
 hook global WinSetOption filetype=(haskell) %{
@@ -208,6 +209,7 @@ define-command -override tree-sitter-user-after-highlighter %{
     add-highlighter -override buffer/show-matching show-matching
 
     rainbow-enable-window
+    colorscheme one-dark-ts
 }
 
 colorscheme one-dark-ts

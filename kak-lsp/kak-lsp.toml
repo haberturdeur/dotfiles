@@ -26,13 +26,14 @@ args = ["start"]
 [language_server.clangd]
 filetypes = ["c", "cpp", "objc"]
 roots = ["compile_commands.json", ".clangd", ".git", ".hg"]
+command = "clangd"
 
 [language_server.ccls]
 filetypes = ["c", "cpp"]
 roots = ["compile_commands.json", ".ccls", ".git"]
 command = "ccls"
 # Disable additional information in autocompletion menus that Kakoune inserts into the buffer until https://github.com/ul/kak-lsp/issues/40 gets fixed
-args = ["--init={\"completion\":{\"detailedLabel\":false}}"]
+args = ["--init={\"completion\":{\"detailedLabel\":false}, \"compilationDatabaseDirectory\": \"build\"}"]
 
 [language_server.clojure-lsp]
 filetypes = ["clojure"]

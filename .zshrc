@@ -26,7 +26,9 @@ export VISUAL="kak"
 export PAGER="bat"
 export NNN_OPTS="eH"
 
-export IDF_PATH=$HOME/esp-idf
+export IDF_ROOT_PATH=$HOME/esp-idf
+export IDF_PATH=$IDF_ROOT_PATH
+export IDF_WORKTREES=$HOME/wokrtrees
 
 export GPG_TTY=$(tty)
 
@@ -38,6 +40,14 @@ if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
         print -P "%F{33} %F{34}Installation successful.%f%b" || \
         print -P "%F{160} The clone has failed.%f%b"
 fi
+
+# Enable completion for switch_idf
+
+autoload -Uz compinit
+compinit
+compdef _switch_idf_complete switch_idf
+
+# Load aditional config
 
 source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
 autoload -Uz _zinit
@@ -116,11 +126,11 @@ export COMPOSE_DOCKER_CLI_BUILD=1
 #####################
 # alias fd=fdfind # not needed on arch
 alias enable_ccache="export IDF_CCACHE_ENABLE=1"
-alias get_idf="enable_ccache && . $IDF_PATH/export.sh"
-alias get_scripts="export PATH=$HOME/scripts:$PATH && echo \"Scripts loaded.\""
-alias install_idf="enable_ccache && $IDF_PATH/install.sh --enable-pytest --enable-ci all"
-alias update_idf="enable_ccache && cd $IDF_PATH && git -C $IDF_PATH pull && git -C $IDF_PATH submodule update --init --recursive && install_idf"
-alias load_idf="install_idf && get_idf && echo \"IDF loaded.\""
+alias get_idf='enable_ccache && . $IDF_PATH/export.sh'
+alias get_scripts='export PATH=$HOME/scripts:$PATH && echo \"Scripts loaded.\'
+alias install_idf='enable_ccache && $IDF_PATH/install.sh --enable-pytest --enable-ci al'
+alias update_idf='enable_ccache && cd $IDF_PATH && git -C $IDF_PATH pull && git -C $IDF_PATH submodule update --init --recursive && install_id'
+alias load_idf='install_idf && get_idf && echo \"IDF loaded.\'
 alias ls="ls --color=always"
 alias pip=pip3
 alias hibernate="sudo systemctl hibernate"
@@ -132,6 +142,60 @@ alias lock="loginctl lock-session"
 alias mc-read="matrix-commander --listen-self --tail -s .config/matrix-commander/store"
 alias haberun="export HOME=$HOME/.profiles/haberun; discord;"
 alias matlab="LD_PRELOAD=\"/usr/lib/libstdc++.so.6\" matlab"
+
+#####################
+# Utils             #
+#####################
+
+switch_idf() {
+    local branch=$1
+
+    # If the branch is "master", set IDF_PATH to IDF_ROOT_PATH
+    if [[ "$branch" == "master" ]]; then
+        export IDF_PATH="$IDF_ROOT_PATH"
+        echo "Branch is 'master'. IDF_PATH set to $IDF_PATH."
+        return
+    fi
+
+    local safe_branch=${branch//\//__}  # Replace / with __ for filesystem-safe directory name
+    local worktree_dir="$IDF_WORKTREES/$safe_branch"
+
+    # Check if the worktree already exists
+    if git -C "$IDF_ROOT_PATH" worktree list | grep -q "$worktree_dir"; then
+        # Set IDF_PATH to the existing worktree location
+        export IDF_PATH="$worktree_dir"
+        echo "Worktree for branch '$branch' already exists. IDF_PATH set to $IDF_PATH."
+    else
+        # Create a new worktree for the branch in the specified location
+        git -C "$IDF_ROOT_PATH" worktree add "$worktree_dir" "$branch"
+        export IDF_PATH="$worktree_dir"
+        echo "Created new worktree for branch '$branch'. IDF_PATH set to $IDF_PATH."
+
+        # Get the list of submodule paths from the output of `git submodule status --recursive`
+        local submodule_paths
+        submodule_paths=$(git -C "$worktree_dir" submodule status --recursive | awk '{print $2}')
+
+        # Loop over each submodule path and perform a shallow clone using --reference
+        (
+            trap 'kill 0' SIGINT
+            echo "$submodule_paths" | while IFS= read -r submodule_path; do
+            # for submodule_path in $submodule_paths; do
+                echo "Updating: $submodule_path"
+                local reference_path="$IDF_ROOT_PATH/$submodule_path"
+                git -C "$worktree_dir" submodule update --init --depth 1 --reference "$reference_path" --dissociate -- "$submodule_path"
+            done
+            wait
+        )
+        echo "Submodules initialized and updated with shallow clone."
+    fi
+}
+
+# Completion for switch_idf
+_switch_idf_complete() {
+  local branches
+  branches=($(git -C "$IDF_ROOT_PATH" for-each-ref --format='%(refname:short)' refs/heads refs/remotes))
+  _describe 'branch' branches
+}
 
 #####################
 # FZF SETTINGS      #
