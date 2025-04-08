@@ -8,19 +8,6 @@ eval %sh{ kak-tree-sitter --with-text-objects -dks --init $kak_session}
 source "%val{config}/plugins/plug.kak/rc/plug.kak"
 plug "andreyorst/plug.kak" noload
 
-# fzf
-plug "andreyorst/fzf.kak" config %{
-  require-module fzf
-  require-module fzf-grep
-  require-module fzf-file
-} defer fzf %{
-  set-option global fzf_highlight_command "lat -r {}"
-} defer fzf-file %{
-  set-option global fzf_file_command "fd . --no-ignore-vcs"
-} defer fzf-grep %{
-  set-option global fzf_grep_command "fd"
-}
-
 plug "andreyorst/powerline.kak" defer kakoune-themes %{
   powerline-theme pastel
 } defer powerline %{
@@ -47,14 +34,6 @@ plug "crizan/kak-rainbower" %{
     }
     set-option global rainbow_mode 0
     set-option global rainbow_colors rgb:ffd700 rgb:da70d6 rgb:179fff
-}
-
-plug "kakounedotcom/prelude.kak" %{
-    require-module prelude
-}
-
-plug "kakounedotcom/connect.kak" %{
-    require-module connect
 }
 
 hook global WinSetOption filetype=(python|javascript|typescript|c|cpp|latex|haskell) %{
@@ -85,22 +64,6 @@ plug "andreyorst/smarttab.kak" defer smarttab %{
     # these languages will use `noexpandtab' behavior
     hook global WinSetOption filetype=(makefile|gas) noexpandtab
 }
-
-plug 'https://gitlab.com/kstr0k/mru-files.kak.git' %{
-  # optional customization: set these *before* plugin loads
-  set global mru_files_history %sh{echo "$HOME/.local/share/kak/mru.txt"}
-  set global kakhist_file %sh{echo "$HOME/.local/share/kak/kakhist.txt"}
-} demand mru-files %{  # %{} needed even if empty
-  # suggested mappings: *after* plugin loads
-  # think "go alt[ernate]-f[iles]"
-  map global goto <a-f> '<esc>: mru-files ' -docstring 'mru-files'
-  map global goto <a-F> '<esc>: mru-files-related<ret>' -docstring 'mru-files-related'
-}
-
-require-module kakhist; kakhist-init
-
-map global goto ':' '<esc>: kakhist-buf-show<ret>' \
-  -docstring 'show command history'
 
 # tabs for autocomplete
 hook global InsertCompletionShow .* %{
@@ -133,14 +96,10 @@ hook global RawKey <mouse:press:middle:.*> %{ exec !xclip<space>-o<ret> }
 map global normal <c-P> '!xclip -o -selection clipboard<ret>'
 map global normal <c-p> '<a-!>xsel --output --clipboard<ret>'
 map global normal <c-R> '|xsel --output --clipboard<ret>'
-map -docstring "open fzf" global user f ": fzf-mode<ret>"
-
-# Explore files with nnn
-# alias global explore-files nnn
 
 hook global NormalKey y|d|c %{
     nop %sh{
-        encoded=$(printf %s "$kak_main_reg_dquote" | base64 | tr -d '\n')
+        encoded=$(printf %s "$kak_main_reg_dquote" | base64)
         printf "\e]52;;%s\e\\" "$encoded" >/dev/tty
     }
 }
@@ -165,11 +124,28 @@ hook global ModeChange (push|pop):insert:.* %{
     set-face window PrimaryCursorEol PrimaryCursorEolNormal
 }
 
-# def toggle-nnn -docstring "open explorer in popup" %{
-#     popup --title open --kak-script %{edit %opt{popup_output}} -- nnn -p -
-# }
+def toggle-rg -docstring "Open interactive ripgrep in a popup." %{
+    popup --title "Ripgrep Search" --kak-script %{
+        evaluate-commands %sh{
+            selected_output="$kak_opt_popup_output"
+            if [ -n "$selected_output" ]; then
+                IFS=':' read -r path line char text <<< "$selected_output"
+                if [ -n "$path" ] && [ -n "$line" ]; then
+                    printf 'edit -existing "%s" %s %s\n' "$path" "$line" "$char"
+                else
+                    printf 'echo -markup "{Warning}Invalid output format: %s Operation aborted."\n' "$selected_output"
+                fi
+            else
+                printf 'echo -markup "{Warning}No file selected. Operation aborted."\n'
+            fi
+        }
+    } -- zsh -i -c irg
+}
 
-def toggle-nnn -docstring "open explorer in popup" %{
+# shortcut
+alias global rg toggle-rg
+
+def toggle-nnn -docstring "Open file explorer in a popup." %{
     popup --title open --kak-script %{
         evaluate-commands %sh{
             selected_file="$kak_opt_popup_output"

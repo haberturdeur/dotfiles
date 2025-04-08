@@ -197,6 +197,16 @@ _switch_idf_complete() {
   _describe 'branch' branches
 }
 
+
+irg() {
+    RELOAD='reload:rg --column --color=always --smart-case {q} || :'
+    fzf --disabled --ansi \
+        --bind "start:$RELOAD" --bind "change:$RELOAD" \
+        --delimiter : \
+        --preview 'bat --style=full --color=always --highlight-line {2} {1}' \
+        --preview-window '~4,+{2}+4/3,<80(up)'
+}
+
 #####################
 # FZF SETTINGS      #
 #####################
