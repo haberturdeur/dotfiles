@@ -2,6 +2,7 @@ set-option global tabstop 4
 set-option global indentwidth 4
 
 declare-option str explorer_path "."
+declare-option str workspace_root "."
 
 eval %sh{ kak-tree-sitter --with-text-objects -dks --init $kak_session}
 
@@ -99,8 +100,7 @@ map global normal <c-R> '|xsel --output --clipboard<ret>'
 
 hook global NormalKey y|d|c %{
     nop %sh{
-        encoded=$(printf %s "$kak_main_reg_dquote" | base64)
-        printf "\e]52;;%s\e\\" "$encoded" >/dev/tty
+        printf %s "$kak_main_reg_dquote" | xclip -in -selection clipboard >&- 2>&-
     }
 }
 

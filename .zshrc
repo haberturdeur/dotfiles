@@ -46,6 +46,7 @@ fi
 autoload -Uz compinit
 compinit
 compdef _switch_idf_complete switch_idf
+compdef _work_complete work
 
 # Load aditional config
 
@@ -205,6 +206,60 @@ irg() {
         --delimiter : \
         --preview 'bat --style=full --color=always --highlight-line {2} {1}' \
         --preview-window '~4,+{2}+4/3,<80(up)'
+}
+
+##
+# 1. "kak()" override. If $WORKSPACE_SESSION is set, attach to that session.
+#    Otherwise, fall back to the normal Kakoune behavior.
+##
+function kak() {
+  if [[ -n "$WORKSPACE_SESSION" ]]; then
+    command kak -c "$WORKSPACE_SESSION" "$@"
+  else
+    command kak "$@"
+  fi
+}
+
+
+##
+# 2. "work()" function.
+#    - Accepts an optional argument: work [session_name]
+#      If omitted, it uses the basename of the current directory.
+#    - Exports WORKSPACE_ROOT and WORKSPACE_SESSION so child shells inherit them.
+#    - If the session doesn't exist, it starts a headless Kakoune server.
+#    - If the session does exist, we simply "attach" this shell to it.
+##
+function work() {
+  local session_name="${1:-$(basename "$PWD")}"
+
+  export WORKSPACE_ROOT="$PWD"
+  export WORKSPACE_SESSION="$session_name"
+
+  if command kak -l | grep -q "^${session_name}\$"; then
+    echo "Attaching to existing Kakoune session '$session_name'."
+  else
+    echo "Creating headless Kakoune session '$session_name'..."
+    command kak -d -s "$session_name" -E "
+      set-option global workspace_root '$WORKSPACE_ROOT'
+
+      hook global ClientClose .* %{
+        evaluate-commands %sh{
+          if [ \"\$(command kak -l $session_name | wc -l)\" -eq 0 ]; then
+            command kak -c \"$session_name\" -e 'kill'
+          fi
+        }
+      }
+    " </dev/null &>/dev/null & disown
+  fi
+}
+
+_work_complete() {
+  local sessions
+  # List Kakoune sessions (omit if you want some other logic)
+  sessions=($(kak -l 2>/dev/null))
+
+  # Provide a descriptive label ("sessions") and your array
+  _describe 'sessions' sessions
 }
 
 #####################
