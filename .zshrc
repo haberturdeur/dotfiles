@@ -193,9 +193,9 @@ switch_idf() {
 
 # Completion for switch_idf
 _switch_idf_complete() {
-  local branches
-  branches=($(git -C "$IDF_ROOT_PATH" for-each-ref --format='%(refname:short)' refs/heads refs/remotes))
-  _describe 'branch' branches
+    local branches
+    branches=($(git -C "$IDF_ROOT_PATH" for-each-ref --format='%(refname:short)' refs/heads refs/remotes))
+    _describe 'branch' branches
 }
 
 
@@ -213,53 +213,125 @@ irg() {
 #    Otherwise, fall back to the normal Kakoune behavior.
 ##
 function kak() {
-  if [[ -n "$WORKSPACE_SESSION" ]]; then
-    command kak -c "$WORKSPACE_SESSION" "$@"
-  else
-    command kak "$@"
-  fi
+    if [[ -n "$WORKSPACE_SESSION" ]]; then
+      command kak -c "$WORKSPACE_SESSION" "$@"
+    else
+      command kak "$@"
+    fi
 }
 
+export WORKSPACE_REGISTRY="$HOME/.workspaces"
 
-##
-# 2. "work()" function.
-#    - Accepts an optional argument: work [session_name]
-#      If omitted, it uses the basename of the current directory.
-#    - Exports WORKSPACE_ROOT and WORKSPACE_SESSION so child shells inherit them.
-#    - If the session doesn't exist, it starts a headless Kakoune server.
-#    - If the session does exist, we simply "attach" this shell to it.
-##
+function ensure_workspace_registry() {
+    if ! [ -f $WORKSPACE_REGISTRY ]; then touch $WORKSPACE_REGISTRY; fi
+}
+
+function workspaces() {
+    ensure_workspace_registry
+    local lines
+    typeset -a lines
+
+    cat $WORKSPACE_REGISTRY
+}
+
+function add_workspace() {
+    ensure_workspace_registry
+    if (( $# != 2 )); then echo "Invalid number of arguments" >&2; return 1; fi
+
+    grep -q "$1:" $WORKSPACE_REGISTRY
+    if [ $? -eq 0 ] ; then echo "Workspace already exists" >&2; return 1; fi
+
+    echo "$1:$2" >> $WORKSPACE_REGISTRY
+}
+
+function remove_workspace() {
+    if (( $# != 1 )); then echo "Invalid number of arguments" >&2; return 1; fi
+
+    sed -i "/^$1:/D" $WORKSPACE_REGISTRY
+}
+
+function get_workspace_path() {
+    if (( $# != 1 )); then echo "Invalid number of arguments" >&2; return 1; fi
+
+    local line=$(grep "^$1:" $WORKSPACE_REGISTRY | head -n 1)
+    if [ -z "$line" ] ; then echo "No such workspace exists" >&2; return 1; fi
+
+    echo $line | cut -d':' -f2-
+}
+
 function work() {
-  local session_name="${1:-$(basename "$PWD")}"
+    if [ $# -gt 2 ]; then echo "Too many arguments" >&2; return 1; fi
+    if [ $# -eq 0 ]; then echo "Too few arguments" >&2; return 1; fi
+    if [ -z $1 ]; then echo "Name must be specified" >&2; return 1; fi
 
-  export WORKSPACE_ROOT="$PWD"
-  export WORKSPACE_SESSION="$session_name"
+    ensure_workspace_registry
 
-  if command kak -l | grep -q "^${session_name}\$"; then
-    echo "Attaching to existing Kakoune session '$session_name'."
-  else
+    local session_name path_arg workspace_path
+
+    if (( $# == 2 )); then add_workspace "$1" "$2" || return 1; fi
+
+    session_name="${1:-$(basename "$PWD")}"
+    workspace_path=$(get_workspace_path "$session_name" 2>/dev/null)
+
+    if [[ -z "$workspace_path" ]]; then
+        echo -n "Workspace '$session_name' not found. Create it at '$PWD'? [y/N] "
+        read confirm
+        if [[ "$confirm" =~ ^[Yy]$ ]]; then
+            add_workspace "$session_name" "$PWD" || return 1
+            workspace_path="$PWD"
+        else
+            echo "Aborted." >&2
+            return 1
+        fi
+    fi
+
+    export WORKSPACE_ROOT="$workspace_path"
+    export WORKSPACE_SESSION="$session_name"
+
+    if command kak -l | grep -q "^${session_name}\$"; then
+        echo "Attaching to existing Kakoune session '$session_name'."
+        return 0
+    fi
+
     echo "Creating headless Kakoune session '$session_name'..."
     command kak -d -s "$session_name" -E "
-      set-option global workspace_root '$WORKSPACE_ROOT'
+        set-option global workspace_root '$WORKSPACE_ROOT'
 
-      hook global ClientClose .* %{
-        evaluate-commands %sh{
-          if [ \"\$(command kak -l $session_name | wc -l)\" -eq 0 ]; then
-            command kak -c \"$session_name\" -e 'kill'
-          fi
+        hook global ClientClose .* %{
+            evaluate-commands %sh{
+                if [ \"\$(command kak -l $session_name | wc -l)\" -eq 0 ]; then
+                    command kak -c \"$session_name\" -e 'kill'
+                fi
+            }
         }
-      }
     " </dev/null &>/dev/null & disown
-  fi
 }
 
 _work_complete() {
-  local sessions
-  # List Kakoune sessions (omit if you want some other logic)
-  sessions=($(kak -l 2>/dev/null))
+  ensure_workspace_registry
 
-  # Provide a descriptive label ("sessions") and your array
-  _describe 'sessions' sessions
+  local cur prev words cword
+  _init_completion || return
+
+  local -a suggestions
+
+  case $cword in
+    1)
+      # First argument: suggest registered workspaces with paths
+      while IFS=: read -r name path; do
+        suggestions+=("$name:$path")
+      done < "$WORKSPACE_REGISTRY"
+      _describe 'workspace: path' suggestions
+      ;;
+    2)
+      # Second argument: suggest filesystem paths
+      _files
+      ;;
+    *)
+      # No completions beyond two arguments
+      return 0
+      ;;
+  esac
 }
 
 #####################

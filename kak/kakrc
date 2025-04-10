@@ -179,6 +179,10 @@ hook global BufOpenFile .* %{
     }
 }
 
+define-command my-custom-lsp-cmd -docstring "Call a custom LSP method" %{
+    lsp-send myExtension/doSomething param1 param2
+}
+
 add-highlighter -override global/ number-lines -hlcursor -separator " "
 define-command -override tree-sitter-user-after-highlighter %{
     add-highlighter -override buffer/ number-lines -hlcursor -separator " "
