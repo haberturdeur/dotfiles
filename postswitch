@@ -1,0 +1,27 @@
+#!/bin/bash
+
+WALLPAPERS="${HOME}/Pictures/desktop"
+
+WALLPAPER_MAIN="${WALLPAPERS}/minuet_of_the_fallen_by_fmcastro.png"
+WALLPAPER_LAPTOP="${WALLPAPERS}/overthinker_by_fmcastro.png"
+WALLPAPER_VERTICAL="${WALLPAPERS}/tma.webp"
+
+[ -z "$AUTORANDR_CURRENT_PROFILE" ] && exit 0
+
+case "$AUTORANDR_CURRENT_PROFILE" in
+  paradise)
+    feh --bg-fill "$WALLPAPER_LAPTOP" "$WALLPAPER_VERTICAL" "$WALLPAPER_MAIN"
+    ;;
+  home)
+    feh --bg-fill "$WALLPAPER_LAPTOP" "$WALLPAPER_MAIN" "$WALLPAPER_VERTICAL"
+    ;;
+  single)
+    feh --bg-fill "$WALLPAPER_LAPTOP"
+    ;;
+  *)
+    feh --bg-fill "$WALLPAPER_LAPTOP"
+    ;;
+esac
+
+echo $AUTORANDR_CURRENT_PROFILE
+echo $0
