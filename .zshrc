@@ -288,6 +288,8 @@ function work() {
     export WORKSPACE_ROOT="$workspace_path"
     export WORKSPACE_SESSION="$session_name"
 
+    cd $WORKSPACE_ROOT
+
     if command kak -l | grep -q "^${session_name}\$"; then
         echo "Attaching to existing Kakoune session '$session_name'."
         return 0
