@@ -19,7 +19,7 @@ case "$AUTORANDR_CURRENT_PROFILE" in
     feh --bg-fill "$WALLPAPER_LAPTOP"
     ;;
   espressif)
-    feh --bg-fill "$WALLPAPER_LAPTOP" "$WALLPAPER_MAIN"
+    feh --bg-fill "$WALLPAPER_LAPTOP" "$WALLPAPER_MAIN" "$WALLPAPER_VERTICAL"
     ;;
   *)
     feh --bg-fill "$WALLPAPER_LAPTOP"

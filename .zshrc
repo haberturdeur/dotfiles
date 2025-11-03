@@ -117,8 +117,6 @@ setopt auto_param_slash
 #####################
 ZSH_AUTOSUGGEST_MANUAL_REBIND=1  # make prompt faster
 DISABLE_MAGIC_FUNCTIONS=true     # make pasting into terminal faster
-export EDITOR=nvim
-export PAGER=bat
 export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1
 
@@ -129,7 +127,7 @@ export COMPOSE_DOCKER_CLI_BUILD=1
 alias enable_ccache="export IDF_CCACHE_ENABLE=1"
 alias get_idf='enable_ccache && . $IDF_PATH/export.sh'
 alias get_scripts='export PATH=$HOME/scripts:$PATH && echo \"Scripts loaded.\'
-alias install_idf='enable_ccache && $IDF_PATH/install.sh --enable-pytest --enable-ci al'
+alias install_idf='enable_ccache && $IDF_PATH/install.sh --enable-ci all'
 alias update_idf='enable_ccache && cd $IDF_PATH && git -C $IDF_PATH pull && git -C $IDF_PATH submodule update --init --recursive && install_id'
 alias load_idf='install_idf && get_idf && echo \"IDF loaded.\'
 alias ls="ls --color=always"
@@ -208,19 +206,38 @@ irg() {
         --preview-window '~4,+{2}+4/3,<80(up)'
 }
 
-##
-# 1. "kak()" override. If $WORKSPACE_SESSION is set, attach to that session.
-#    Otherwise, fall back to the normal Kakoune behavior.
-##
-function kak() {
-    if [[ -n "$WORKSPACE_SESSION" ]]; then
-      command kak -c "$WORKSPACE_SESSION" "$@"
-    else
-      command kak "$@"
-    fi
-}
+export KAK_GLOBAL_SESSION="${KAK_GLOBAL_SESSION:-global}"
 
 export WORKSPACE_REGISTRY="$HOME/.workspaces"
+
+# Ensure a Kakoune session exists; start headless if missing
+ensure_kak_session() {
+  local s="${1:-$KAK_GLOBAL_SESSION}"
+  if ! command kak -l | grep -qx -- "$s"; then
+    # Start a headless server for the session if it doesn't exist
+    command kak -d -s "$s" </dev/null &>/dev/null & disown
+  fi
+}
+
+# Smart kak() wrapper:
+# - If a workspace is bound, connect there.
+# - Else, connect to the global session (ensured).
+# - If user supplies kak session flags, pass through unchanged.
+kak() {
+  # If user is explicitly managing sessions, don't interfere.
+  if [[ "$1" == -* ]]; then
+    case " $* " in
+      *" -c "*|*" -s "*|*" -l "*|*" -p "*|*" -d "*) command kak "$@"; return ;;
+    esac
+  fi
+
+  local target="${WORKSPACE_SESSION:-$KAK_GLOBAL_SESSION}"
+  ensure_kak_session "$target"
+  command kak -c "$target" "$@"
+}
+
+# Quality-of-life: quickly unbind this terminal from any workspace
+unwork() { unset WORKSPACE_SESSION WORKSPACE_ROOT; }
 
 function ensure_workspace_registry() {
     if ! [ -f $WORKSPACE_REGISTRY ]; then touch $WORKSPACE_REGISTRY; fi
