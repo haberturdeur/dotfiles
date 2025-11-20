@@ -17,8 +17,23 @@
 [alias]
 	adog = log --all --decorate --oneline --graph
 	pullsub = ! git pull && git submodule update --init --recursive
-	l = log --oneline
+	l = log --oneline -n 25
+	subupdate = submodule update --init --recursive --depth 1
 
 [include]
 	path = ~/.gitconfig.identity
 
+[merge]
+	conflictstyle = diff3
+[core]
+	excludesFile = ~/.user_gitignore
+	autocrlf = false
+	eol = native
+    pager = bat --paging=never
+[pager]
+    log = bat
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
