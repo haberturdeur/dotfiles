@@ -1,0 +1,27 @@
+env TERM=xterm-kitty
+
+clipboard_control write-clipboard write-primary
+
+font_family DejaVu Sans M Nerd Font
+font_size 9.0
+
+scrollback_lines 10000
+
+copy_on_select yes
+
+hide_window_decorations yes
+
+background_opacity 0.85
+
+window_padding_width 1 1
+
+detect_urls yes
+open_url_with default
+url_prefixes ipfs,ipns,magnet,mailto,gemini,gopher,https,http,news,file,git,ssh,ftp
+
+map ctrl+shift+o kitten hints --type url --program xdg-open
+
+cursor_shape block
+cursor_blink_interval 0
+
+include current-theme.conf

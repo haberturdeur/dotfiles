@@ -4,22 +4,26 @@ WALLPAPERS="${HOME}/Pictures/desktop"
 
 WALLPAPER_MAIN="${WALLPAPERS}/minuet_of_the_fallen_by_fmcastro.png"
 WALLPAPER_LAPTOP="${WALLPAPERS}/overthinker_by_fmcastro.png"
-WALLPAPER_VERTICAL="${WALLPAPERS}/tma.webp"
+WALLPAPER_RIGHT="${WALLPAPERS}/tma.webp"
+WALLPAPER_LEFT="${WALLPAPERS}/tears_from_the_past_by_fmcastro.jpg"
 
 [ -z "$AUTORANDR_CURRENT_PROFILE" ] && exit 0
 
 case "$AUTORANDR_CURRENT_PROFILE" in
   paradise)
-    feh --bg-fill "$WALLPAPER_LAPTOP" "$WALLPAPER_VERTICAL" "$WALLPAPER_MAIN"
+    feh --bg-fill "$WALLPAPER_LAPTOP" "$WALLPAPER_MAIN" "$WALLPAPER_RIGHT"
     ;;
   home)
-    feh --bg-fill "$WALLPAPER_LAPTOP" "$WALLPAPER_MAIN" "$WALLPAPER_VERTICAL"
+    feh --bg-fill "$WALLPAPER_LAPTOP" "$WALLPAPER_RIGHT" "$WALLPAPER_MAIN"
     ;;
   single)
     feh --bg-fill "$WALLPAPER_LAPTOP"
     ;;
   espressif)
     feh --bg-fill "$WALLPAPER_LAPTOP" "$WALLPAPER_MAIN" "$WALLPAPER_VERTICAL"
+    ;;
+  two)
+    feh --bg-fill "$WALLPAPER_LAPTOP" "$WALLPAPER_MAIN"
     ;;
   *)
     feh --bg-fill "$WALLPAPER_LAPTOP"

@@ -51,8 +51,8 @@ zinit load zsh-users/zsh-autosuggestions
 zi0a
 zinit light Tarrasch/zsh-autoenv
 
-zi0a src'asdf.sh' mv'completions/_asdf -> .'
-zinit light asdf-vm/asdf
+# zi0a src'asdf.sh' mv'completions/_asdf -> .'
+# zinit light asdf-vm/asdf
 
 zinit wait'0b' lucid for \
     OMZL::clipboard.zsh \

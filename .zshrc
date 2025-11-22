@@ -20,6 +20,7 @@ export PATH=$HOME/scripts:$PATH
 export PATH=/opt/microchip/xc8/v2.40/bin:/opt/microchip/xc8/v2.40/pic/bin:$PATH
 export PATH=$HOME/.cargo/bin:$PATH
 export PATH=$HOME/matlab/bin:$PATH
+export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
 
 export EDITOR="kak"
 export VISUAL="kak"
@@ -40,6 +41,16 @@ if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
         print -P "%F{33} %F{34}Installation successful.%f%b" || \
         print -P "%F{160} The clone has failed.%f%b"
 fi
+
+autoload -U up-line-or-beginning-search down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+
+# Bind arrow keys to those widgets
+bindkey '^[[A' up-line-or-beginning-search   # Up arrow
+bindkey '^[[B' down-line-or-beginning-search # Down arrow
+
+fpath=(${ASDF_DATA_DIR:-$HOME/.asdf}/completions $fpath)
 
 # Enable completion for switch_idf
 
@@ -206,7 +217,35 @@ irg() {
         --preview-window '~4,+{2}+4/3,<80(up)'
 }
 
+igc() {
+    if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+        echo "Not inside a git repository." >&2
+        return 1
+    fi
+
+    local selection
+    selection=$(
+        git log --color=always --date=short \
+            --pretty=format:'%C(auto)%h%Creset %C(dim)%ad%Creset %s %C(blue)<%an>%Creset%x09%H' \
+        | fzf --ansi --no-sort \
+              --delimiter=$'\t' --with-nth=1 \
+              --preview 'git show --color=always {2}' \
+              --preview-window 'right:60%:wrap'
+    )
+
+    [[ -z "$selection" ]] && return 1
+
+    printf '%s\n' "${selection##*$'\t'}"
+}
+
 export KAK_GLOBAL_SESSION="${KAK_GLOBAL_SESSION:-global}"
+function kak() {
+    if [[ -n "$WORKSPACE_SESSION" ]]; then
+      command kak -c "$WORKSPACE_SESSION" "$@"
+    else
+      command kak "$@"
+    fi
+}
 
 export WORKSPACE_REGISTRY="$HOME/.workspaces"
 
@@ -330,7 +369,6 @@ _work_complete() {
   ensure_workspace_registry
 
   local cur prev words cword
-  _init_completion || return
 
   local -a suggestions
 
@@ -416,4 +454,3 @@ if [ -f /usr/share/nnn/quitcd/quitcd.bash_sh_zsh ]; then
 fi
 
 export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/ssh-agent.socket
-

@@ -39,7 +39,7 @@ plug "crizan/kak-rainbower" %{
 
 hook global WinSetOption filetype=(python|javascript|typescript|c|cpp|latex|haskell) %{
     eval %sh{kak-lsp}
-    set global lsp_debug true
+    set global lsp_debug false
     lsp-enable
     set global lsp_cmd "kak-lsp -s %val{session} -vvv --log /tmp/kak-lsp.log"
     echo -debug "Enabling LSP for filtetype %opt{filetype}"
@@ -178,6 +178,24 @@ hook global BufOpenFile .* %{
         fi
     }
 }
+
+define-command sc-pipe -params 1.. -docstring "Pipe selection to smartcat" %{
+    execute-keys -draft "| sc %arg{@} --context %val{buffile} <ret>"
+}
+
+define-command sc-append -params 1.. -docstring "Pipe selection to smartcat and append result" %{
+    # The -r flag repeats the input, effectively appending the LLM output.
+    execute-keys -draft "| sc -r %arg{@} --context %val{buffile} <ret>"
+}
+
+declare-user-mode ai
+
+map global user a %{:enter-user-mode ai<ret>} -docstring "Enter AI mode"
+
+map global ai c ': sc-append complete<ret>' -docstring "Complete code"
+map global ai f ': sc-pipe fix<ret>' -docstring "Fix code"
+map global ai p ': prompt "sc prompt (replace): " "%{sc-pipe %val{text}}"<ret>' -docstring "Custom prompt (replace)"
+map global ai P ': prompt "sc prompt (append): " "%{sc-append %val{text}}"<ret>' -docstring "Custom prompt (append)"
 
 define-command my-custom-lsp-cmd -docstring "Call a custom LSP method" %{
     lsp-send myExtension/doSomething param1 param2

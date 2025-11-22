@@ -2,6 +2,10 @@
 	name = Tomáš Rohlínek
 	useConfigOnly = true
 	email = rohlinektomas@gmail.com
+[submodule]
+    fetchJobs = 10
+[checkout]
+    workers = 0
 [commit]
 	gpgsign = true
 [credential]
