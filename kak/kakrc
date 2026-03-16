@@ -37,6 +37,10 @@ plug "crizan/kak-rainbower" %{
     set-option global rainbow_colors rgb:ffd700 rgb:da70d6 rgb:179fff
 }
 
+hook global WinCreate .*\.rst$ %{
+    add-highlighter window/rst-wrap wrap -word -indent
+}
+
 hook global WinSetOption filetype=(python|javascript|typescript|c|cpp|latex|haskell) %{
     eval %sh{kak-lsp}
     set global lsp_debug false
@@ -211,3 +215,5 @@ define-command -override tree-sitter-user-after-highlighter %{
 }
 
 colorscheme one-dark-ts
+
+set-face global LineNumbersWrapped %opt{none},%opt{none}

@@ -29,7 +29,9 @@ export NNN_OPTS="eH"
 
 export IDF_ROOT_PATH=$HOME/esp-idf
 export IDF_PATH=$IDF_ROOT_PATH
-export IDF_WORKTREES=$HOME/wokrtrees
+export IDF_WORKTREES=$HOME/worktrees
+
+export DOCKER_HOST=unix://$XDG_RUNTIME_DIR/docker.sock
 
 export GPG_TTY=$(tty)
 
@@ -159,6 +161,10 @@ alias matlab="LD_PRELOAD=\"/usr/lib/libstdc++.so.6\" matlab"
 
 switch_idf() {
     local branch=$1
+    if [[ -z "$branch" ]]; then
+        echo "Usage: switch_idf <branch>"
+        return 1
+    fi
 
     # If the branch is "master", set IDF_PATH to IDF_ROOT_PATH
     if [[ "$branch" == "master" ]]; then
@@ -169,6 +175,7 @@ switch_idf() {
 
     local safe_branch=${branch//\//__}  # Replace / with __ for filesystem-safe directory name
     local worktree_dir="$IDF_WORKTREES/$safe_branch"
+    mkdir -p "$IDF_WORKTREES"
 
     # Check if the worktree already exists
     if git -C "$IDF_ROOT_PATH" worktree list | grep -q "$worktree_dir"; then
@@ -181,22 +188,27 @@ switch_idf() {
         export IDF_PATH="$worktree_dir"
         echo "Created new worktree for branch '$branch'. IDF_PATH set to $IDF_PATH."
 
-        # Get the list of submodule paths from the output of `git submodule status --recursive`
-        local submodule_paths
-        submodule_paths=$(git -C "$worktree_dir" submodule status --recursive | awk '{print $2}')
+        local jobs
+        if [[ -n "$SWITCH_IDF_JOBS" ]]; then
+            jobs="$SWITCH_IDF_JOBS"
+        else
+            local cpu_count
+            cpu_count=$(getconf _NPROCESSORS_ONLN 2>/dev/null || nproc 2>/dev/null || echo 8)
+            # Aggressive default for submodule-heavy repos, capped to avoid overwhelming remotes.
+            jobs=$(( cpu_count * 2 ))
+            (( jobs > 32 )) && jobs=32
+            (( jobs < 8 )) && jobs=8
+        fi
+        git -C "$worktree_dir" submodule sync --recursive
 
-        # Loop over each submodule path and perform a shallow clone using --reference
-        (
-            trap 'kill 0' SIGINT
-            echo "$submodule_paths" | while IFS= read -r submodule_path; do
-            # for submodule_path in $submodule_paths; do
-                echo "Updating: $submodule_path"
-                local reference_path="$IDF_ROOT_PATH/$submodule_path"
-                git -C "$worktree_dir" submodule update --init --depth 1 --reference "$reference_path" --dissociate -- "$submodule_path"
-            done
-            wait
-        )
-        echo "Submodules initialized and updated with shallow clone."
+        # Fast path: shallow + blobless + parallel submodule fetch.
+        if ! git -C "$worktree_dir" -c fetch.parallel="$jobs" -c submodule.fetchJobs="$jobs" -c submodule.alternateLocation=superproject -c submodule.alternateErrorStrategy=info \
+            submodule update --init --recursive --depth 1 --single-branch --recommend-shallow --jobs "$jobs" --filter=blob:none; then
+            echo "Submodule filter fallback: retrying without --filter=blob:none"
+            git -C "$worktree_dir" -c fetch.parallel="$jobs" -c submodule.fetchJobs="$jobs" -c submodule.alternateLocation=superproject -c submodule.alternateErrorStrategy=info \
+                submodule update --init --recursive --depth 1 --single-branch --recommend-shallow --jobs "$jobs" || return $?
+        fi
+        echo "Submodules initialized (depth=1, recursive, jobs=$jobs)."
     fi
 }
 
@@ -454,3 +466,5 @@ if [ -f /usr/share/nnn/quitcd/quitcd.bash_sh_zsh ]; then
 fi
 
 export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/ssh-agent.socket
+
+. "$HOME/.local/bin/env"
