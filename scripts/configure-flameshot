@@ -1,0 +1,77 @@
+#!/bin/bash
+
+set -euo pipefail
+
+set_ini_value() {
+    local file="$1"
+    local section="$2"
+    local key="$3"
+    local value="$4"
+    local tmp
+
+    mkdir -p "$(dirname "$file")"
+    touch "$file"
+    tmp="$(mktemp)"
+
+    awk -v section="$section" -v key="$key" -v value="$value" '
+        BEGIN {
+            current = ""
+            found_section = 0
+            wrote_key = 0
+        }
+        /^\[[^]]+\]$/ {
+            if (current == section && !wrote_key) {
+                print key "=" value
+                wrote_key = 1
+            }
+            current = substr($0, 2, length($0) - 2)
+            if (current == section) {
+                found_section = 1
+            }
+            print
+            next
+        }
+        current == section && $0 ~ "^[[:space:]]*" key "[[:space:]]*=" {
+            if (!wrote_key) {
+                print key "=" value
+                wrote_key = 1
+            }
+            next
+        }
+        { print }
+        END {
+            if (!found_section) {
+                print "[" section "]"
+                print key "=" value
+            } else if (current == section && !wrote_key) {
+                print key "=" value
+            }
+        }
+    ' "$file" > "$tmp" && mv "$tmp" "$file"
+}
+
+portal_has_screenshot() {
+    command -v busctl >/dev/null 2>&1 || return 1
+
+    busctl --user introspect org.freedesktop.portal.Desktop /org/freedesktop/portal/desktop 2>/dev/null |
+        grep -q 'org.freedesktop.portal.Screenshot'
+}
+
+should_use_legacy_x11() {
+    local desktop
+
+    command -v flameshot >/dev/null 2>&1 || return 1
+    [[ "${XDG_SESSION_TYPE:-}" == "x11" || ( -n "${DISPLAY:-}" && -z "${WAYLAND_DISPLAY:-}" ) ]] || return 1
+
+    desktop="${XDG_CURRENT_DESKTOP:-${DESKTOP_SESSION:-}}"
+    case "${desktop,,}" in
+        *i3*) return 0 ;;
+    esac
+
+    ! portal_has_screenshot
+}
+
+if should_use_legacy_x11; then
+    set_ini_value "$HOME/.config/flameshot/flameshot.ini" "General" "useX11LegacyScreenshot" "true"
+    set_ini_value "$HOME/.config/flameshot/flameshot.ini" "General" "captureActiveMonitor" "true"
+fi

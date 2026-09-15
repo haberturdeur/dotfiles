@@ -14,3 +14,5 @@ ln -sf "$PWD/kak/" "$HOME/.config"
 ln -sf "$PWD/kak-lsp/" "$HOME/.config"
 ln -sf "$PWD/postswitch" "$HOME/.config/autorandr"
 ln -sf "$PWD/.gdbinit" "$HOME"
+
+"$PWD/scripts/configure-flameshot"
